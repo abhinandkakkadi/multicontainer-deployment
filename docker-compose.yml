@@ -6,7 +6,14 @@ services:
       - POSTGRES_PASSWORD=postgres_password # env variable will be taken at runtime of the application
   redis:
     image: "redis:latest"
-  server:
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./ngnix
+    ports:
+      - "3050:80"
+  api:
     build:
       dockerfile: Dockerfile.dev
       context: ./server
@@ -21,3 +28,20 @@ services:
       - PGDATABASE=postgres
       - PGPASSWORD=postgres_password
       - PGPORT=5432
+  client:
+    build:
+      dockerfile: Dockerfile.Dev
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - .client:/app
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    volumes:
+      - /app/node_modules
+      - ./woker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
