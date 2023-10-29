@@ -3,7 +3,7 @@ services:
   postgres:
     image: "postgres:latest"
     environment:
-      - POSTGRES_PASSWORD=postgres_password # env variable will be taken at runtime of the application
+      - POSTGRES_PASSWORD=postgres_password
   redis:
     image: "redis:latest"
   nginx:
@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile.dev
       context: ./server
     volumes:
-      - /app/node_modules # add bookmark to node_modules as we don't want node_modules to be retrieved from local system
+      - /app/node_modules
       - ./server:/app
     environment:
       - REDIS_HOST=redis
@@ -33,18 +33,20 @@ services:
       - PGPORT=5432
   client:
     build:
-      dockerfile: Dockerfile.Dev
+      dockerfile: Dockerfile.dev
       context: ./client
     volumes:
-      - /app/node_modules
-      - .client:/app
+      - /home/node/app/node_modules
+      - ./client:/home/node/app
+    environment:
+      - WDS_SOCKET_PORT=0
   worker:
     build:
       dockerfile: Dockerfile.dev
       context: ./worker
     volumes:
       - /app/node_modules
-      - ./woker:/app
+      - ./worker:/app
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
