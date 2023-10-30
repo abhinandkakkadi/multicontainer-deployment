@@ -1,0 +1,19 @@
+sudo: required
+
+services:
+  - docker
+
+# if we have multiple tests to build, we can specify it under the before_install section
+before_install:
+  - docker build -t abhinandkakkadi/react-test -f ,.client/Dockerfile.dev ./client
+
+# ll'y id we have multiple build for testing, we can specify it under this. In this case we only have test
+# for react-app
+script:
+  - docker run abhinandkakkadi/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t abhinandkakkadi/multi-client ./client
+  - docker build -t abhinandkakkadi/multi-nginx ./nginx
+  - docker build -t abhinandkakkadi/multi-server ./server
+  - docker build -t abhinandkakkadi/multi-worker ./worker
