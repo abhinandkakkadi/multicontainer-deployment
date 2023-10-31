@@ -19,7 +19,7 @@ after_success:
   - docker build -t abhinandkakkadi/multi-worker ./worker
 
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  #take those images and push them to dockerhub
+  #take those images and push them to docker hub
   - docker push abhinandkakkadi/multi-client
   - docker push abhinandkakkadi/multi-nginx
   - docker push abhinandkakkadi/multi-server
