@@ -10,7 +10,7 @@ before_install:
 # ll'y id we have multiple build for testing, we can specify it under this. In this case we only have test
 # for react-app
 script:
-  - docker run abhinandkakkadi/react-test npm test -- --coverage
+  - docker run -e CI=true abhinandkakkadi/react-test npm test
 
 after_success:
   - docker build -t abhinandkakkadi/multi-client ./client
